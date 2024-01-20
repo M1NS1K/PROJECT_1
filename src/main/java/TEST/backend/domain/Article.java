@@ -21,15 +21,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 public class Article {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    protected Long id;
     private String title;
-
     private String content;
 
     @CreatedDate
     private LocalDateTime createdAt;
-
     @LastModifiedDate
     private LocalDateTime updatedAt;
 

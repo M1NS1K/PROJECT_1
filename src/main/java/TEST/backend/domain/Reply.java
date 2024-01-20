@@ -11,13 +11,18 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class Comment {
+public class Reply {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long memberId;
     private String content;
+    private Long recommend;
+
+    public void update(Long recommend) {
+        this.recommend = recommend;
+    }
 }
