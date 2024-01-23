@@ -1,6 +1,7 @@
 package TEST.backend.dto;
 
 import TEST.backend.domain.Article;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +10,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ArticleViewResponse {
 
+    @NotNull
     private Long id;
+
+    @NotNull
     private String title;
+
+    @NotNull
     private String content;
+
+    @NotNull
     private LocalDateTime createdAt;
 
     public ArticleViewResponse(Article article) {

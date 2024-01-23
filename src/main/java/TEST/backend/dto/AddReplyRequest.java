@@ -1,6 +1,7 @@
 package TEST.backend.dto;
 
 import TEST.backend.domain.Reply;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class AddReplyRequest {
+
+    @NotNull
     private String content;
+
+    @NotNull
     private Long recommend;
 
     public Reply toEntity(Long id) {

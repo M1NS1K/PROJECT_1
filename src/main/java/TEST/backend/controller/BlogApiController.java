@@ -8,6 +8,7 @@ import TEST.backend.dto.ArticleResponse;
 import TEST.backend.dto.ReplyResponse;
 import TEST.backend.dto.UpdateArticleRequest;
 import TEST.backend.service.ReplyService;
+import jakarta.validation.Valid;
 import java.util.List;
 import TEST.backend.service.BlogService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class BlogApiController {
     private final ReplyService replyService;
 
     @PostMapping("/articles")
-    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request) {
+    public ResponseEntity<Article> addArticle(@Valid @RequestBody AddArticleRequest request) {
         Article savedArticle = blogService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedArticle);
@@ -58,7 +59,7 @@ public class BlogApiController {
     }
 
     @PutMapping("/articles/{id}")
-    public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody UpdateArticleRequest request) {
+    public ResponseEntity<Article> updateArticle(@PathVariable Long id, @Valid @RequestBody UpdateArticleRequest request) {
         Article updatedArticle = blogService.update(id, request);
 
         return ResponseEntity.ok()
@@ -66,7 +67,7 @@ public class BlogApiController {
     }
 
     @PostMapping("/articles/{id}/reply")
-    public ResponseEntity<Reply> addReply(@PathVariable Long id, @RequestBody AddReplyRequest request) {
+    public ResponseEntity<Reply> addReply(@PathVariable Long id, @Valid @RequestBody AddReplyRequest request) {
         Reply savedReply = replyService.save(id, request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedReply);
