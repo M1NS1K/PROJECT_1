@@ -2,7 +2,6 @@ package TEST.backend.service;
 
 import TEST.backend.domain.dto.ArticleRequest;
 import TEST.backend.domain.entity.Article;
-import TEST.backend.dto.UpdateArticleRequest;
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +15,7 @@ public class BlogService {
     private final BlogRepository blogRepository;
 
     @Transactional
-    public Article save(ArticleRequest request) {
-        Article article = request.toEntity();
+    public Article save(Article article) {
         return blogRepository.save(article);
     }
 

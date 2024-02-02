@@ -28,7 +28,7 @@ public class BlogApiController {
     @PostMapping("/new-form")
     public ResponseEntity<ArticleResponse> newArticle(@Valid @RequestBody ArticleRequest request) {
         blogService.save(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body("make new-form success");
+        return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
 
     //request give article List
