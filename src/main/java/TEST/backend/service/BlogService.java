@@ -37,10 +37,10 @@ public class BlogService {
         blogRepository.deleteById(id);
     }
 
-    public void update(Long id, Article article) {
+    public Article update(Long id, Article article) {
         Article findArticle = blogRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
         findArticle.update(article);
-        blogRepository.save(findArticle);
+        return blogRepository.save(findArticle);
     }
 }

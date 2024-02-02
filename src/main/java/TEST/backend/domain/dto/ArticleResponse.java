@@ -1,17 +1,13 @@
 package TEST.backend.domain.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 
-@Getter
+@Data
+@Builder
 @AllArgsConstructor
 public class ArticleResponse {
-
-    @NotNull
     private final String title;
-
-    @NotNull
     private final String content;
-
 }

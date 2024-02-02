@@ -44,7 +44,7 @@ const createButton = document.getElementById('create-btn');
 
 if (createButton) {
     createButton.addEventListener('click', event => {
-        fetch('/api/articles', {
+        fetch('/api/new-form', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
