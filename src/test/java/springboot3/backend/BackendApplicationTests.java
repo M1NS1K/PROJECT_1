@@ -3,8 +3,8 @@ package springboot3.backend;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import TEST.backend.domain.dto.ArticleRequest;
 import TEST.backend.domain.entity.Article;
-import TEST.backend.dto.AddArticleRequest;
 import TEST.backend.dto.UpdateArticleRequest;
 import TEST.backend.repository.BlogRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,18 +35,16 @@ class BlogApiControllerTest {
 	protected MockMvc mockMvc;
 
 	@Autowired
-	protected ObjectMapper objectMapper;
-
-	@Autowired
 	private WebApplicationContext context;
 
+	private final ObjectMapper objectMapper = new ObjectMapper();
+
 	@Autowired
-	BlogRepository blogRepository;
+	private BlogRepository blogRepository;
 
 	@BeforeEach
 	public void mockMvcSetUp() {
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
-				.build();
+		this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 		blogRepository.deleteAll();
 	}
 
@@ -54,10 +52,10 @@ class BlogApiControllerTest {
 	@Test
 	public void addArticle() throws Exception {
 		// given
-		final String url = "/api/articles";
+		final String url = "/api/new-form";
 		final String title = "title";
 		final String content = "content";
-		final AddArticleRequest userRequest = new AddArticleRequest(title, content);
+		final ArticleRequest userRequest = new ArticleRequest(title, content);
 
 		final String requestBody = objectMapper.writeValueAsString(userRequest);
 

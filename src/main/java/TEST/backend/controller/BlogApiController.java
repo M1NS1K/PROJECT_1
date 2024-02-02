@@ -1,17 +1,17 @@
 package TEST.backend.controller;
 
-import TEST.backend.domain.dto.ArticleDTO;
+import TEST.backend.domain.dto.ArticleRequest;
 import TEST.backend.domain.entity.Article;
 import TEST.backend.domain.entity.Reply;
 import TEST.backend.dto.AddReplyRequest;
 import TEST.backend.dto.ArticleResponse;
 import TEST.backend.dto.ReplyResponse;
 import TEST.backend.dto.UpdateArticleRequest;
-import TEST.backend.repository.BlogRepository;
 import TEST.backend.service.ReplyService;
 import jakarta.validation.Valid;
 import java.util.List;
 import TEST.backend.service.BlogService;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,24 +24,18 @@ public class BlogApiController {
 
     private final BlogService blogService;
     private final ReplyService replyService;
-    private final BlogRepository blogRepository;
 
     @PostMapping("/new-form")
-    public ResponseEntity<Article> addArticle(@Valid @RequestBody ArticleDTO article) {
-        Article savedArticle = blogService.save(article.toEntity());
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(savedArticle);
+    public ResponseEntity<String> newArticle(@Valid @RequestBody ArticleRequest request) {
+        blogService.save(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body("ok");
     }
 
     @GetMapping("/articles")
-    public ResponseEntity<List<ArticleResponse>> findAllArticles() {
-        List<ArticleResponse> articles = blogService.findAll()
-                .stream()
-                .map(ArticleResponse::new)
-                .toList();
+    public ResponseEntity<List<Article>> findAllArticles() {
+        List<Article> articles = blogService.findAll();
 
-        return ResponseEntity.ok()
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(articles);
     }
 

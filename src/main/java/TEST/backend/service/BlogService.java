@@ -1,8 +1,7 @@
 package TEST.backend.service;
 
-import TEST.backend.domain.dto.ArticleDTO;
+import TEST.backend.domain.dto.ArticleRequest;
 import TEST.backend.domain.entity.Article;
-import TEST.backend.dto.AddArticleRequest;
 import TEST.backend.dto.UpdateArticleRequest;
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +16,9 @@ public class BlogService {
     private final BlogRepository blogRepository;
 
     @Transactional
-    public Article save(Article article) {
-        return blogRepository.save(article);
+    public void save(ArticleRequest request) {
+        Article article = request.toEntity();
+        blogRepository.save(article);
     }
 
     @Transactional(readOnly = true)
