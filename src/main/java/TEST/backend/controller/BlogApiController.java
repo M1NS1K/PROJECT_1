@@ -7,6 +7,7 @@ import TEST.backend.dto.AddReplyRequest;
 import TEST.backend.dto.ArticleResponse;
 import TEST.backend.dto.ReplyResponse;
 import TEST.backend.dto.UpdateArticleRequest;
+import TEST.backend.repository.BlogRepository;
 import TEST.backend.service.ReplyService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -23,10 +24,12 @@ public class BlogApiController {
 
     private final BlogService blogService;
     private final ReplyService replyService;
+    private final BlogRepository blogRepository;
 
-    @PostMapping("/articles")
-    public ResponseEntity<Article> addArticle(@Valid @RequestBody ArticleDTO newArticle) {
-        Article savedArticle = blogService.save(newArticle);
+    @PostMapping("/new-form")
+    public ResponseEntity<Article> addArticle(@Valid @RequestBody ArticleDTO article) {
+        Article savedArticle = blogService.save(article.toEntity());
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedArticle);
     }

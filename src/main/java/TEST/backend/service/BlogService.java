@@ -1,5 +1,6 @@
 package TEST.backend.service;
 
+import TEST.backend.domain.dto.ArticleDTO;
 import TEST.backend.domain.entity.Article;
 import TEST.backend.dto.AddArticleRequest;
 import TEST.backend.dto.UpdateArticleRequest;
@@ -16,8 +17,8 @@ public class BlogService {
     private final BlogRepository blogRepository;
 
     @Transactional
-    public Article save(AddArticleRequest request) {
-        return blogRepository.save(request.toEntity());
+    public Article save(Article article) {
+        return blogRepository.save(article);
     }
 
     @Transactional(readOnly = true)
