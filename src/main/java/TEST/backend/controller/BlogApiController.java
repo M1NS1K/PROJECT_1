@@ -27,8 +27,8 @@ public class BlogApiController {
     //request form make
     @PostMapping("/new-form")
     public ResponseEntity<ArticleResponse> newArticle(@Valid @RequestBody ArticleRequest request) {
-        blogService.save(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body("");
+        blogService.save(request.toEntity());
+        return ResponseEntity.status(HttpStatus.CREATED).body();
     }
 
     //request give article List
@@ -54,8 +54,8 @@ public class BlogApiController {
     }
 
     @PutMapping("/articles/{id}")
-    public ResponseEntity<Article> updateArticle(@PathVariable Long id, @Valid @RequestBody UpdateArticleRequest request) {
-        Article updatedArticle = blogService.update(id, request);
+    public ResponseEntity<Article> updateArticle(@PathVariable Long id, @Valid @RequestBody ArticleRequest request) {
+        Article updatedArticle = blogService.update(request);
 
         return ResponseEntity.ok()
                 .body(updatedArticle);

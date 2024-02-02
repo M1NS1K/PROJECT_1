@@ -34,5 +34,4 @@ public class Article {
         this.title = article.getTitle();
         this.content = article.getContent();
     }
-
 }
