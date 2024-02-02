@@ -1,7 +1,7 @@
-package TEST.backend.controller;
+package TEST.backend.article.controller;
 
-import TEST.backend.domain.entity.Article;
-import TEST.backend.service.BlogService;
+import TEST.backend.article.domain.entity.Article;
+import TEST.backend.article.service.BlogService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

@@ -1,4 +1,4 @@
-package TEST.backend.domain.entity;
+package TEST.backend.chat.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,11 +18,8 @@ public class Reply {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long memberId;
+    private Long userId;
     private String content;
     private Long recommend;
 
-    public void update(Long recommend) {
-        this.recommend = recommend;
-    }
 }

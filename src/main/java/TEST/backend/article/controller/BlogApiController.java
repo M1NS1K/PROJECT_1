@@ -1,10 +1,10 @@
-package TEST.backend.controller;
+package TEST.backend.article.controller;
 
-import TEST.backend.domain.dto.ArticleRequest;
-import TEST.backend.domain.entity.Article;
+import TEST.backend.article.domain.dto.ArticleDTO;
+import TEST.backend.article.domain.entity.Article;
+import TEST.backend.article.service.BlogService;
 import jakarta.validation.Valid;
 import java.util.List;
-import TEST.backend.service.BlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class BlogApiController {
 
     //request form make
     @PostMapping("/new-form")
-    public ResponseEntity<Article> newArticle(@Valid @RequestBody ArticleRequest request) {
+    public ResponseEntity<Article> newArticle(@Valid @RequestBody ArticleDTO request) {
         Article article = blogService.save(request.toEntity());
         return ResponseEntity.status(HttpStatus.CREATED).body(article);
     }
@@ -46,7 +46,7 @@ public class BlogApiController {
     }
 
     @PutMapping("/articles/{id}")
-    public ResponseEntity<Article> updateArticle(@PathVariable Long id, @Valid @RequestBody ArticleRequest request) {
+    public ResponseEntity<Article> updateArticle(@PathVariable Long id, @Valid @RequestBody ArticleDTO request) {
         Article updatedArticle = blogService.update(id, request.toEntity());
 
         return ResponseEntity.ok()

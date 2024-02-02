@@ -1,6 +1,5 @@
-package TEST.backend.domain.entity;
+package TEST.backend.article.domain.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

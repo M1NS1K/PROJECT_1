@@ -3,10 +3,10 @@ package springboot3.backend;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import TEST.backend.domain.dto.ArticleRequest;
-import TEST.backend.domain.entity.Article;
+import TEST.backend.article.domain.dto.ArticleDTO;
+import TEST.backend.article.domain.entity.Article;
 import TEST.backend.dto.UpdateArticleRequest;
-import TEST.backend.repository.BlogRepository;
+import TEST.backend.article.repository.BlogRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,7 +55,7 @@ class BlogApiControllerTest {
 		final String url = "/api/new-form";
 		final String title = "title";
 		final String content = "content";
-		final ArticleRequest userRequest = new ArticleRequest(title, content);
+		final ArticleDTO userRequest = new ArticleDTO(title, content);
 
 		final String requestBody = objectMapper.writeValueAsString(userRequest);
 

@@ -1,12 +1,12 @@
-package TEST.backend.service;
+package TEST.backend.article.service;
 
-import TEST.backend.domain.entity.Article;
+import TEST.backend.article.domain.entity.Article;
+import TEST.backend.article.repository.BlogRepository;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import TEST.backend.repository.BlogRepository;
 
 @Slf4j
 @RequiredArgsConstructor

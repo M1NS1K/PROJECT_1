@@ -1,6 +1,6 @@
-package TEST.backend.domain.dto;
+package TEST.backend.article.domain.dto;
 
-import TEST.backend.domain.entity.Article;
+import TEST.backend.article.domain.entity.Article;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class ArticleRequest {
+public class ArticleDTO {
     private String title;
     private String content;
 
