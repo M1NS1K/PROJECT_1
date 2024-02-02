@@ -1,7 +1,7 @@
 package TEST.backend.service;
 
-import TEST.backend.domain.Article;
-import TEST.backend.domain.Reply;
+import TEST.backend.domain.entity.Article;
+import TEST.backend.domain.entity.Reply;
 import TEST.backend.dto.AddReplyRequest;
 import TEST.backend.dto.UpdateReplyRequest;
 import TEST.backend.repository.ReplyRepository;

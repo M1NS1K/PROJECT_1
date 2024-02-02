@@ -1,8 +1,8 @@
 package TEST.backend.controller;
 
-import TEST.backend.domain.Article;
-import TEST.backend.domain.Reply;
-import TEST.backend.dto.AddArticleRequest;
+import TEST.backend.domain.dto.ArticleDTO;
+import TEST.backend.domain.entity.Article;
+import TEST.backend.domain.entity.Reply;
 import TEST.backend.dto.AddReplyRequest;
 import TEST.backend.dto.ArticleResponse;
 import TEST.backend.dto.ReplyResponse;
@@ -16,17 +16,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class BlogApiController {
 
     private final BlogService blogService;
     private final ReplyService replyService;
 
     @PostMapping("/articles")
-    public ResponseEntity<Article> addArticle(@Valid @RequestBody AddArticleRequest request) {
-        Article savedArticle = blogService.save(request);
+    public ResponseEntity<Article> addArticle(@Valid @RequestBody ArticleDTO newArticle) {
+        Article savedArticle = blogService.save(newArticle);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedArticle);
     }
@@ -79,6 +79,4 @@ public class BlogApiController {
         return ResponseEntity.ok()
                 .body(new ReplyResponse(reply));
     }
-
-
 }

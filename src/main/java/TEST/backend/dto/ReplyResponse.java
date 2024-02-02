@@ -1,7 +1,6 @@
 package TEST.backend.dto;
 
-import TEST.backend.domain.Article;
-import TEST.backend.domain.Reply;
+import TEST.backend.domain.entity.Reply;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 

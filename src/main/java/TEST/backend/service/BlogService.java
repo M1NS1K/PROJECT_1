@@ -1,6 +1,6 @@
 package TEST.backend.service;
 
-import TEST.backend.domain.Article;
+import TEST.backend.domain.entity.Article;
 import TEST.backend.dto.AddArticleRequest;
 import TEST.backend.dto.UpdateArticleRequest;
 import java.util.List;

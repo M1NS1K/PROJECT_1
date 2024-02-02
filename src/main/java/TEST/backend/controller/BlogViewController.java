@@ -1,6 +1,6 @@
 package TEST.backend.controller;
 
-import TEST.backend.domain.Article;
+import TEST.backend.domain.entity.Article;
 import TEST.backend.dto.ArticleListViewResponse;
 import TEST.backend.dto.ArticleViewResponse;
 import TEST.backend.service.BlogService;

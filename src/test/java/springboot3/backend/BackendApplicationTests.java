@@ -3,7 +3,7 @@ package springboot3.backend;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import TEST.backend.domain.Article;
+import TEST.backend.domain.entity.Article;
 import TEST.backend.dto.AddArticleRequest;
 import TEST.backend.dto.UpdateArticleRequest;
 import TEST.backend.repository.BlogRepository;
