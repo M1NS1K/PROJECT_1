@@ -4,14 +4,13 @@ import TEST.backend.domain.dto.ArticleRequest;
 import TEST.backend.domain.entity.Article;
 import TEST.backend.domain.entity.Reply;
 import TEST.backend.dto.AddReplyRequest;
-import TEST.backend.dto.ArticleResponse;
+import TEST.backend.domain.dto.ArticleResponse;
 import TEST.backend.dto.ReplyResponse;
 import TEST.backend.dto.UpdateArticleRequest;
 import TEST.backend.service.ReplyService;
 import jakarta.validation.Valid;
 import java.util.List;
 import TEST.backend.service.BlogService;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,26 +24,25 @@ public class BlogApiController {
     private final BlogService blogService;
     private final ReplyService replyService;
 
+    //request form make
     @PostMapping("/new-form")
-    public ResponseEntity<String> newArticle(@Valid @RequestBody ArticleRequest request) {
+    public ResponseEntity<ArticleResponse> newArticle(@Valid @RequestBody ArticleRequest request) {
         blogService.save(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body("ok");
+        return ResponseEntity.status(HttpStatus.CREATED).body("make new-form success");
     }
 
+    //request give article List
     @GetMapping("/articles")
     public ResponseEntity<List<Article>> findAllArticles() {
         List<Article> articles = blogService.findAll();
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(articles);
+        return ResponseEntity.status(HttpStatus.CREATED).body(articles);
     }
 
     @GetMapping("/articles/{id}")
-    public ResponseEntity<ArticleResponse> findArticle(@PathVariable Long id) {
+    public ResponseEntity<Article> findArticle(@PathVariable Long id) {
         Article article = blogService.findById(id);
 
-        return ResponseEntity.ok()
-                .body(new ArticleResponse(article));
+        return new ResponseEntity<>(article, HttpStatus.OK);
     }
 
     @DeleteMapping("/articles/{id}")

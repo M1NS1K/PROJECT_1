@@ -1,10 +1,11 @@
-package TEST.backend.dto;
+package TEST.backend.domain.dto;
 
-import TEST.backend.domain.entity.Article;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class ArticleResponse {
 
     @NotNull
@@ -13,8 +14,4 @@ public class ArticleResponse {
     @NotNull
     private final String content;
 
-    public ArticleResponse(Article article) {
-        this.title = article.getTitle();
-        this.content = article.getContent();
-    }
 }

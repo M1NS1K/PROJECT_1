@@ -16,14 +16,15 @@ public class BlogService {
     private final BlogRepository blogRepository;
 
     @Transactional
-    public void save(ArticleRequest request) {
+    public Article save(ArticleRequest request) {
         Article article = request.toEntity();
-        blogRepository.save(article);
+        return blogRepository.save(article);
     }
 
     @Transactional(readOnly = true)
     public List<Article> findAll() {
-        return blogRepository.findAll();
+        List<Article> articles = blogRepository.findAll();
+        return articles;
     }
 
     @Transactional(readOnly = true)
@@ -38,10 +39,9 @@ public class BlogService {
     }
 
     @Transactional
-    public Article update(Long id, UpdateArticleRequest request) {
-        Article article = blogRepository.findById(id)
+    public void update(Long id, Article article) {
+        Article findArticle = blogRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
-
-        return article;
+        findArticle.update(article);
     }
 }

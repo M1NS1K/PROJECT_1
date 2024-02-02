@@ -30,9 +30,9 @@ public class Article {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public void update(String title, String content) {
-        this.title = title;
-        this.content = content;
+    public void update(Article article) {
+        this.title = article.getTitle();
+        this.content = article.getContent();
     }
 
 }
