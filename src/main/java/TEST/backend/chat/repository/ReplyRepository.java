@@ -15,4 +15,8 @@ public class ReplyRepository {
         em.persist(reply);
         return reply.getId();
     }
+
+    public Reply find(Long id) {
+        return em.find(Reply.class, id);
+    }
 }
