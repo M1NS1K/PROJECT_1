@@ -19,12 +19,10 @@ public class ReplyViewController {
     private final ReplyService service;
 
     @GetMapping("/{id}")
-    public String listReplies(@PathVariable Long id, Model model) {
+    public String getReplies(@PathVariable Long id, Model model) {
         List<Reply> ReplyList = service.findAll();
         model.addAttribute("ReplyList", ReplyList);
         return "article";
     }
 
-    @PostMapping("/{id}")
-    public String
 }
