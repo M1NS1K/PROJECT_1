@@ -21,10 +21,10 @@ public class Reply {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "user")
+    @Column(name = "user", nullable = false, length = 10)
     private Long username;
 
-    @Column(name = "content")
+    @Column(name = "content", length = 200)
     private String content;
 
 }
