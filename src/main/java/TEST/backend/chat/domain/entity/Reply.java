@@ -1,5 +1,6 @@
 package TEST.backend.chat.domain.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,8 +18,13 @@ import lombok.NoArgsConstructor;
 public class Reply {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
+
+    @Column(name = "user")
     private Long username;
+
+    @Column(name = "content")
     private String content;
 
 }
