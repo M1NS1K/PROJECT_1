@@ -1,7 +1,18 @@
 package TEST.backend.chat.repository;
 
 import TEST.backend.chat.domain.entity.Reply;
-import org.springframework.data.jpa.repository.JpaRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.springframework.stereotype.Repository;
 
-public interface ReplyRepository extends JpaRepository<Reply, Long> {
+@Repository
+public class ReplyRepository {
+
+    @PersistenceContext
+    EntityManager em;
+
+    public Long save(Reply reply) {
+        em.persist(reply);
+        return reply.getId();
+    }
 }

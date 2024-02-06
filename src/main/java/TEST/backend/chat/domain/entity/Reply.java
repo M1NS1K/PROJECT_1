@@ -18,8 +18,7 @@ public class Reply {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long userId;
+    private Long username;
     private String content;
-    private Long recommend;
 
 }
