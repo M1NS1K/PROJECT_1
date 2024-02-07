@@ -17,9 +17,10 @@ public class BlogService {
     private final BlogRepository blogRepository;
 
     @Transactional
-    public Long save(Article article) {
+    public Article save(Article article) {
         log.info("Saving article: {}", article);
-        return blogRepository.save(article);
+        Long savedArticleId = blogRepository.save(article);
+        return blogRepository.findById(savedArticleId);
     }
 
     public List<Article> findAll() {
@@ -38,9 +39,10 @@ public class BlogService {
     }
 
     @Transactional
-    public Long update(Long id, Article article) {
+    public Article update(Long id, Article article) {
         Article savedArticle = blogRepository.findById(id);
         savedArticle.update(article);
-        return blogRepository.save(savedArticle);
+        Long savedArticleId = blogRepository.save(savedArticle);
+        return blogRepository.findById(savedArticleId);
     }
 }

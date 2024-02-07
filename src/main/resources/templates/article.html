@@ -24,7 +24,6 @@
           <p class="fs-5 mb-4" th:text="${article.content}"></p>
         </section>
         <button type="button" id="modify-btn"
-                th:onclick="|location.href='@{/new-article?id={articleId}(articleId=${article.id})}'|"
                 class="btn btn-primary btn-sm">수정</button>
         <button type="button" id="delete-btn"
                 class="btn btn-secondary btn-sm">삭제</button>
@@ -39,22 +38,22 @@
     <div class="form-group">
       <textarea class="form-control" id="reply-content" name="content" rows="3" placeholder="댓글을 입력하세요."></textarea>
     </div>
-    <button type="submit" class="btn btqn-primary btn-sm">댓글 등록</button>
+    <button type="submit" class="btn btn-primary btn-sm">댓글 등록</button>
   </form>
 </div>
 
-<div class="container mt-5">
-  <h5>댓글</h5>
-  <div id="replies">
-    <div th:each="reply : ${article.replies}">
-      <div class="mb-2">
-        <strong th:text="${reply.author}"></strong>
-        <span th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
-        <p th:text="${reply.content}"></p>
-      </div>
-    </div>
-  </div>
-</div>
+<!--<div class="container mt-5">-->
+<!--  <h5>댓글</h5>-->
+<!--  <div id="replies">-->
+<!--    <div th:each="reply : ${article.replies}">-->
+<!--      <div class="mb-2">-->
+<!--        <strong th:text="${reply.author}"></strong>-->
+<!--        <span th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}"></span>-->
+<!--        <p th:text="${reply.content}"></p>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
 
 <script src="/article.js"></script>
 <script src="/path/to/reply.js"></script>

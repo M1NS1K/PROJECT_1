@@ -1,12 +1,12 @@
 // reply.js
 document.addEventListener('DOMContentLoaded', function() {
-    var replyForm = document.getElementById('reply-form');
+    let replyForm = document.getElementById('reply-form');
     if (replyForm) {
         replyForm.addEventListener('submit', function(event) {
             event.preventDefault(); // 폼 기본 제출 방지
 
-            var articleId = document.getElementById('article-id').value;
-            var content = document.getElementById('reply-content').value;
+            let articleId = document.getElementById('article-id').value;
+            let content = document.getElementById('reply-content').value;
 
             fetch(`/api/articles/${articleId}/replies`, {
                 method: 'POST',
