@@ -24,7 +24,7 @@ public class ReplyApiController {
     private final ReplyService service;
 
     @PostMapping("/articles/{id}")
-    public ResponseEntity<Reply> newReply(@PathVariable Long id, ReplyDTO request) {
+    public ResponseEntity<Reply> addReply(@PathVariable Long id, ReplyDTO request) {
         Reply reply = service.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(reply);
     }
@@ -37,7 +37,7 @@ public class ReplyApiController {
 
     @DeleteMapping("/articles/{id}/{userId}")
     public ResponseEntity<Void> deleteReply(@PathVariable Long id, @PathVariable Long userId) {
-        service.deleteByUserId(userId);
+        service.delete(userId);
         return ResponseEntity.ok().build();
     }
 

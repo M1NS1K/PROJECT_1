@@ -27,4 +27,8 @@ public class Reply {
     @Column(name = "content", length = 200)
     private String content;
 
+    void update(Reply reply) {
+        this.username = reply.getUsername();
+        this.content = reply.getContent();
+    }
 }

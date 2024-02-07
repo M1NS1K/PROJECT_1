@@ -2,6 +2,7 @@ package TEST.backend.article.controller;
 
 import TEST.backend.article.domain.entity.Article;
 import TEST.backend.article.repository.BlogRepository;
+import TEST.backend.article.service.BlogService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,18 +17,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/articles")
 public class BlogViewController {
 
-    private final BlogRepository blogRepository;
+    private final BlogService blogService;
 
     @GetMapping()
     public String getArticles(Model model) {
-        List<Article> articles = blogRepository.findAll();
+        List<Article> articles = blogService.findAll();
         model.addAttribute("articles", articles);
         return "articleList";
     }
 
     @GetMapping("/{id}")
     public String getArticle(@PathVariable Long id, Model model) {
-        Article article = blogRepository.findById(id);
+        Article article = blogService.findById(id);
         model.addAttribute("article", article);
         return "article";
     }
@@ -37,7 +38,7 @@ public class BlogViewController {
         if (id == null) {
             model.addAttribute("article", new Article()); // 새 게시글 작성을 위한 빈 Article 객체 추가
         } else {
-            Article article = blogRepository.findById(id);
+            Article article = blogService.findById(id);
             model.addAttribute("article", article); // 기존 게시글 편집을 위한 Article 객체 추가
         }
         return "addArticle";

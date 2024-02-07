@@ -21,8 +21,11 @@ public class Article {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
+
     private String title;
     private String content;
+
+    //사용자 계정 추가
 
     @CreatedDate
     private LocalDateTime createdAt;

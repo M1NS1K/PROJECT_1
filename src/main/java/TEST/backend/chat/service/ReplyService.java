@@ -3,6 +3,7 @@ package TEST.backend.chat.service;
 import TEST.backend.chat.domain.dto.ReplyDTO;
 import TEST.backend.chat.domain.entity.Reply;
 import TEST.backend.chat.repository.ReplyRepository;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,14 +17,21 @@ public class ReplyService {
     private final ReplyRepository repository;
 
     public Reply save(ReplyDTO request) {
-        return repository.save(request.toEntity());
+        Reply entity = request.toEntity();
+        if(entity == null) throw new IllegalArgumentException("not find");
+        return entity;
     }
 
     public List<Reply> findAll() {
         return repository.findAll();
     }
 
-    public void deleteByUserId(Long id) {
+    public Reply findById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("not found" + id));
+    }
+
+    public void delete(Long id) {
         repository.deleteById(id);
     }
 }

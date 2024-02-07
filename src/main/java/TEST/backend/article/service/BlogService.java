@@ -10,37 +10,37 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class BlogService {
 
     private final BlogRepository blogRepository;
 
-    public Article save(Article article) {
+    @Transactional
+    public Long save(Article article) {
         log.info("Saving article: {}", article);
         return blogRepository.save(article);
     }
 
-    @Transactional(readOnly = true)
     public List<Article> findAll() {
         List<Article> articles = blogRepository.findAll();
         return articles;
     }
 
-    @Transactional(readOnly = true)
     public Article findById(Long id) {
-        return blogRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
+        return blogRepository.findById(id);
     }
 
+    @Transactional
     public void delete(Long id) {
-        blogRepository.deleteById(id);
+        Article article = blogRepository.findById(id);
+        blogRepository.delete(article);
     }
 
-    public Article update(Long id, Article article) {
-        Article findArticle = blogRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
-        findArticle.update(article);
-        return blogRepository.save(findArticle);
+    @Transactional
+    public Long update(Long id, Article article) {
+        Article savedArticle = blogRepository.findById(id);
+        savedArticle.update(article);
+        return blogRepository.save(savedArticle);
     }
 }

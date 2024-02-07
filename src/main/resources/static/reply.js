@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch(`/api/articles/${articleId}/replies`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Typ    e': 'application/json',
                 },
                 body: JSON.stringify({ content: content })
             })

@@ -5,12 +5,12 @@ import lombok.Data;
 
 @Data
 public class ReplyDTO {
-    private Long userId;
+    private Long username;
     private String content;
 
     public Reply toEntity() {
         return Reply.builder()
-                .userId(userId)
+                .username(username)
                 .content(content)
                 .build();
     }
