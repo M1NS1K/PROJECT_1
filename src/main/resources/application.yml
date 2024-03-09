@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    maximum-pool-size: 4
+    url: jdbc:postgresql://localhost:5432/testDatabase
+    username: postgres
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+

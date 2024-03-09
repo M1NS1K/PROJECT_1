@@ -1,7 +1,9 @@
 package TEST.backend.article.controller;
 
+import TEST.backend.article.domain.dto.ArticleResponse;
 import TEST.backend.article.domain.entity.Article;
 import TEST.backend.article.service.BlogService;
+import TEST.backend.article.service.dto.ServiceDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -13,21 +15,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/articles")
-public class BlogViewController {
+public class BlogController {
 
     private final BlogService blogService;
 
     @GetMapping()
     public String getArticles(Model model) {
-        List<Article> articles = blogService.findAll();
-        model.addAttribute("articles", articles);
+        List<ServiceDto> serviceDtoList = blogService.findAll();
+        List<ArticleResponse> responseList = serviceDtoList.stream()
+                .map(serviceDto -> ArticleResponse.builder()
+                        .title(serviceDto.getTitle())
+                        .content(serviceDto.getContent())
+                        .build())
+                .toList();
+
+        model.addAttribute("articles", responseList);
+
         return "articleList";
     }
 
     @GetMapping("/{id}")
     public String getArticle(@PathVariable Long id, Model model) {
-        Article article = blogService.findById(id);
-        model.addAttribute("article", article);
+        ServiceDto serviceDto = blogService.findById(id);
+        ArticleResponse response = ArticleResponse.builder()
+                .title(serviceDto.getTitle())
+                .content(serviceDto.getContent())
+                .build();
+
+        model.addAttribute("article", response);
+
         return "article";
     }
 

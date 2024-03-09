@@ -3,7 +3,7 @@ package springboot3.backend;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import TEST.backend.article.domain.dto.ArticleDTO;
+import TEST.backend.article.domain.dto.ArticleRequest;
 import TEST.backend.article.domain.entity.Article;
 import TEST.backend.dto.UpdateArticleRequest;
 import TEST.backend.article.repository.BlogRepository;
@@ -55,7 +55,7 @@ class BlogApiControllerTest {
 		final String url = "/api/new-form";
 		final String title = "title";
 		final String content = "content";
-		final ArticleDTO userRequest = new ArticleDTO(title, content);
+		final ArticleRequest userRequest = new ArticleRequest(title, content);
 
 		final String requestBody = objectMapper.writeValueAsString(userRequest);
 

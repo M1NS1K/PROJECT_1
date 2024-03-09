@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class ArticleDTO {
+public class ArticleRequest {
     private String title;
     private String content;
 

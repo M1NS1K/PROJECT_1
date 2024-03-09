@@ -1,8 +1,11 @@
 package TEST.backend.article.service;
 
+import TEST.backend.article.domain.dto.ArticleRequest;
 import TEST.backend.article.domain.entity.Article;
 import TEST.backend.article.repository.BlogRepository;
+import TEST.backend.article.service.dto.ServiceDto;
 import java.util.List;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,32 +20,47 @@ public class BlogService {
     private final BlogRepository blogRepository;
 
     @Transactional
-    public Article save(Article article) {
-        log.info("Saving article: {}", article);
-        Long savedArticleId = blogRepository.save(article);
-        return blogRepository.findById(savedArticleId);
+    public ServiceDto save(ArticleRequest request) {
+        Article article = blogRepository.save(request.toEntity());
+        ServiceDto serviceDto = ServiceDto.builder()
+                .title(article.getTitle())
+                .content(article.getContent())
+                .build();
+
+        return serviceDto;
     }
 
-    public List<Article> findAll() {
+    public List<ServiceDto> findAll() {
         List<Article> articles = blogRepository.findAll();
-        return articles;
+        List<ServiceDto> serviceDtoList = articles.stream()
+                .map(article -> ServiceDto.builder()
+                        .title(article.getTitle())
+                        .content(article.getContent())
+                        .build())
+                .toList();
+
+        return serviceDtoList;
     }
 
-    public Article findById(Long id) {
-        return blogRepository.findById(id);
+    public ServiceDto findById(Long id) {
+        Optional<Article> article = blogRepository.findById(id);
+        ServiceDto serviceDto = ServiceDto.builder()
+                .title(article.get().getTitle())
+                .content(article.get().getContent())
+                .build();
+
+        return serviceDto;
     }
 
     @Transactional
     public void delete(Long id) {
-        Article article = blogRepository.findById(id);
-        blogRepository.delete(article);
+        Optional<Article> article = blogRepository.findById(id);
+        blogRepository.delete(article.get());
     }
 
     @Transactional
-    public Article update(Long id, Article article) {
-        Article savedArticle = blogRepository.findById(id);
-        savedArticle.update(article);
-        Long savedArticleId = blogRepository.save(savedArticle);
-        return blogRepository.findById(savedArticleId);
+    public void update(Long id, ArticleRequest request) {
+        Optional<Article> savedArticle = blogRepository.findById(id);
+        savedArticle.get().update(request.toEntity());
     }
 }
