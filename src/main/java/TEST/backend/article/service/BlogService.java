@@ -23,6 +23,7 @@ public class BlogService {
     public ServiceDto save(ArticleRequest request) {
         Article article = blogRepository.save(request.toEntity());
         ServiceDto serviceDto = ServiceDto.builder()
+                .id(article.getId())
                 .title(article.getTitle())
                 .content(article.getContent())
                 .build();
@@ -34,6 +35,7 @@ public class BlogService {
         List<Article> articles = blogRepository.findAll();
         List<ServiceDto> serviceDtoList = articles.stream()
                 .map(article -> ServiceDto.builder()
+                        .id(article.getId())
                         .title(article.getTitle())
                         .content(article.getContent())
                         .build())
@@ -45,6 +47,7 @@ public class BlogService {
     public ServiceDto findById(Long id) {
         Optional<Article> article = blogRepository.findById(id);
         ServiceDto serviceDto = ServiceDto.builder()
+                .id(article.get().getId())
                 .title(article.get().getTitle())
                 .content(article.get().getContent())
                 .build();

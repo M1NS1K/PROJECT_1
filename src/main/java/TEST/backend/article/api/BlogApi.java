@@ -22,10 +22,7 @@ public class BlogApi {
     @PostMapping("/add")
     public ResponseEntity<ArticleResponse> newArticle(@Valid @RequestBody ArticleRequest request) {
         ServiceDto serviceDto = blogService.save(request);
-        ArticleResponse response = ArticleResponse.builder()
-                .title(serviceDto.getTitle())
-                .content(serviceDto.getContent())
-                .build();
+        ArticleResponse response = new ArticleResponse(serviceDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -35,10 +32,7 @@ public class BlogApi {
     public ResponseEntity<List<ArticleResponse>> findAllArticles() {
         List<ServiceDto> serviceDtoList = blogService.findAll();
         List<ArticleResponse> responseList = serviceDtoList.stream()
-                .map(serviceDto -> ArticleResponse.builder()
-                        .title(serviceDto.getTitle())
-                        .content(serviceDto.getContent())
-                        .build())
+                .map(serviceDto -> new ArticleResponse(serviceDto))
                 .toList();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseList);
@@ -47,10 +41,7 @@ public class BlogApi {
     @GetMapping("/{id}")
     public ResponseEntity<ArticleResponse> findArticle(@PathVariable Long id) {
         ServiceDto serviceDto = blogService.findById(id);
-        ArticleResponse response = ArticleResponse.builder()
-                .title(serviceDto.getTitle())
-                .content(serviceDto.getContent())
-                .build();
+        ArticleResponse response = new ArticleResponse(serviceDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

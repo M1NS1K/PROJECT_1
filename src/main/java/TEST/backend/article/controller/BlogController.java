@@ -23,10 +23,7 @@ public class BlogController {
     public String getArticles(Model model) {
         List<ServiceDto> serviceDtoList = blogService.findAll();
         List<ArticleResponse> responseList = serviceDtoList.stream()
-                .map(serviceDto -> ArticleResponse.builder()
-                        .title(serviceDto.getTitle())
-                        .content(serviceDto.getContent())
-                        .build())
+                .map(serviceDto -> new ArticleResponse(serviceDto))
                 .toList();
 
         model.addAttribute("articles", responseList);
@@ -37,10 +34,7 @@ public class BlogController {
     @GetMapping("/{id}")
     public String getArticle(@PathVariable Long id, Model model) {
         ServiceDto serviceDto = blogService.findById(id);
-        ArticleResponse response = ArticleResponse.builder()
-                .title(serviceDto.getTitle())
-                .content(serviceDto.getContent())
-                .build();
+        ArticleResponse response = new ArticleResponse(serviceDto);
 
         model.addAttribute("article", response);
 
