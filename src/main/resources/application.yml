@@ -12,3 +12,7 @@ spring:
     show-sql: true
 
 
+server.servlet.session.tracking-modes = cookie
+# 쿠키 파기 시간 설정을 여기서 해줄수도 있음
+server.servlet.session.timeout = 1800
+
