@@ -10,9 +10,23 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-
-
-server.servlet.session.tracking-modes = cookie
-# 쿠키 파기 시간 설정을 여기서 해줄수도 있음
-server.servlet.session.timeout = 1800
-
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${kakao.client.id}
+            client-secret: ${kakao.client.secret}
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/kakao"
+            client-authentication-method: POST
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize # "인가 코드 받기" 항목
+            token-uri: https://kauth.kakao.com/oauth/token # "토큰 받기" 항목
+            user-info-uri: https://kapi.kakao.com/v2/user/me # "사용자 정보 가져오기" 항목
+            user-name-attribute: id # 식별자 . 카카오의 경우 "id" 사용
+kakao:
+  client:
+    id: 8734600e50a8dfe9cba84613b43c7cda
+    secret: id5gKSO3KmDKcjCC0QogCObFIDel7AQg
