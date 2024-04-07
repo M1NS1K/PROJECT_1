@@ -1,6 +1,6 @@
 package TEST.backend.article.controller;
 
-import TEST.backend.article.constant.UserRole;
+import TEST.backend.article.constant.RoleType;
 import TEST.backend.article.domain.dto.JoinRequest;
 import TEST.backend.article.domain.dto.LoginRequest;
 import TEST.backend.article.domain.entity.User;
@@ -157,7 +157,7 @@ public class SessionLoginController {
             return "redirect:/session-login/login";
         }
 
-        if(!loginUser.getRole().equals(UserRole.ADMIN)) {
+        if(!loginUser.getRole().equals(RoleType.ADMIN)) {
             return "redirect:/session-login";
         }
 

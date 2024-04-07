@@ -1,6 +1,8 @@
 package TEST.backend.article.domain.entity;
 
-import TEST.backend.article.constant.UserRole;
+import TEST.backend.article.constant.RoleType;
+import TEST.backend.article.constant.UserStatus;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -8,32 +10,45 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@ToString(callSuper = true)
 @Entity
-@Builder
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name="user_entity")
+@Builder
+@Table(name="USERS")
 public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
-    @NotBlank
+    @Column(name = "login_id", nullable = false)
     private String loginId;
 
-    @NotBlank
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @NotBlank
-    private String nickname;
+    @Column(name = "username", nullable = false)
+    private String username;
 
-    @Enumerated(EnumType.ORDINAL)
-    private UserRole role;
+    @Column(name = "email", nullable = false)
+    @Email
+    private String email;
+
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
+
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
 }

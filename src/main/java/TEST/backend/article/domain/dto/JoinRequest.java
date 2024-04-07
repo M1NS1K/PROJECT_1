@@ -1,6 +1,6 @@
 package TEST.backend.article.domain.dto;
 
-import TEST.backend.article.constant.UserRole;
+import TEST.backend.article.constant.RoleType;
 import TEST.backend.article.domain.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -28,7 +28,7 @@ public class JoinRequest {
                 .loginId(this.loginId)
                 .password(this.password)
                 .nickname(this.nickname)
-                .role(UserRole.USER)
+                .role(RoleType.USER)
                 .build();
     }
 
@@ -38,7 +38,7 @@ public class JoinRequest {
                 .loginId(this.loginId)
                 .password(encodedPassword)
                 .nickname(this.nickname)
-                .role(UserRole.USER)
+                .role(RoleType.USER)
                 .build();
     }
 }
