@@ -25,7 +25,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Table(name="USERS")
-public class User {
+public class User extends {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
