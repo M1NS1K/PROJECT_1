@@ -1,5 +1,6 @@
 package TEST.backend.article.filter;
 
+import TEST.backend.article.utils.TokenUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -61,7 +63,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             if(token != null && !token.equalsIgnoreCase("")) {
 
                 // [STEP.2-2] 쿠키 내에있는 토큰이 유효한지 여부를 체크한다.
-                if()
+                if(TokenUtils.isValidToken(token)) {
+
+                    String loginId = TokenUtils.getUserIdFromToken(token);
+                    log.debug("[+] loginId Check: " + loginId);
+
+                    if(loginId != null && !loginId.equalsIgnoreCase("")) {
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(loginId)
+                    }
+                }
             }
         }
     }
