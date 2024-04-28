@@ -1,6 +1,8 @@
 package TEST.backend.article.config;
 
+import TEST.backend.article.constant.Role;
 import TEST.backend.article.constant.RoleType;
+import TEST.backend.article.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +24,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CustomOAuth2UserService oAuth2UserService;
+    private final UserService userService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
 
@@ -45,15 +47,15 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/login", "/join").permitAll()
-                        .requestMatchers("/admin").hasRole(RoleType.ADMIN.name())
-                        .requestMatchers("/my/**").hasAnyRole(RoleType.ADMIN.name(), RoleType.USER.name())
+                        .requestMatchers("/admin").hasRole(Role.ADMIN.name())
+                        .requestMatchers("/my/**").hasAnyRole(Role.ADMIN.name(), RoleType.USER.name())
                         .anyRequest().authenticated()
                 );
 
         // oauth2 설정
         http
                 .oauth2Login(oauth ->
-                        oauth.userInfoEndpoint(c -> c.userService(oAuth2UserService))
+                        oauth.userInfoEndpoint(c -> c.userService(userService))
                                 .successHandler(oAuth2SuccessHandler)
                 );
 

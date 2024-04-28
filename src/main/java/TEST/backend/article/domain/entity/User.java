@@ -3,6 +3,7 @@ package TEST.backend.article.domain.entity;
 import TEST.backend.article.constant.Role;
 import TEST.backend.article.constant.RoleType;
 import TEST.backend.article.constant.UserStatus;
+import TEST.backend.article.domain.dto.UserInfo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
