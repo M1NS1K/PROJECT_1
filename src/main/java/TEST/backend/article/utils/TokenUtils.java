@@ -1,6 +1,6 @@
 package TEST.backend.article.utils;
 
-import TEST.backend.article.domain.dto.UserDto;
+import TEST.backend.article.domain.dto.UserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtBuilder;
@@ -29,7 +29,7 @@ public class TokenUtils {
     private static final String LOGIN_ID = "loginId";
     private static final String USERNAME = "username";
 
-    public static String generateJwtToken(UserDto userDto) {
+    public static String generateJwtToken(UserInfo userDto) {
 
         /**
          * 헤더(createHeader 메서드): JWT의 타입과 사용된 알고리즘을 정의한다. 여기서는 "JWT" 타입과 "HS256" 알고리즘이 사용된다.
@@ -86,7 +86,7 @@ public class TokenUtils {
         return header;
     }
 
-    private static Map<String, Object> createClaims(UserDto userDto) {
+    private static Map<String, Object> createClaims(UserInfo userDto) {
         Map<String, Object> claims = new HashMap<>();
 
         log.info("loginId : " + userDto.loginId());

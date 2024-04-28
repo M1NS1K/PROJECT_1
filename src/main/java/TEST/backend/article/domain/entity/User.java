@@ -1,5 +1,6 @@
 package TEST.backend.article.domain.entity;
 
+import TEST.backend.article.constant.Role;
 import TEST.backend.article.constant.RoleType;
 import TEST.backend.article.constant.UserStatus;
 import jakarta.persistence.Column;
@@ -17,6 +18,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.context.annotation.Profile;
+
+import java.util.UUID;
 
 @ToString(callSuper = true)
 @Entity
@@ -25,7 +29,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Table(name="USERS")
-public class User extends {
+public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -40,13 +44,19 @@ public class User extends {
     @Column(name = "username", nullable = false)
     private String username;
 
+    @Column(name = "profile", nullable = false)
+    private String profile;
+
+    @Column(name = "userKey", nullable = false)
+    private UUID userKey;
+
     @Column(name = "email", nullable = false)
     @Email
     private String email;
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    private RoleType role;
+    private Role role;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
