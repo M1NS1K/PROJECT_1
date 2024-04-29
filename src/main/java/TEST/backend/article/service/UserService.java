@@ -6,12 +6,10 @@ import TEST.backend.article.domain.dto.UserInfo;
 import TEST.backend.article.domain.entity.User;
 import TEST.backend.article.repository.UserRepository;
 
-import java.lang.reflect.Member;
 import java.util.Map;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -46,7 +44,17 @@ public class UserService extends DefaultOAuth2UserService {
 		UserInfo userInfo = UserInfo.of(registrationId, userAttributes);
 
 		// register, login
+		User user = getOrSave(userInfo);
 
+		return new PrincipalDetails()
+
+	}
+
+	private User getOrSave(UserInfo userInfo) {
+		User user = userRepository.findByEmail(userInfo.email())
+				.orElseGet(userInfo.toEntity());
+
+		return userRepository.save(user);
 	}
 
 	public boolean checkLoginIdDuplicate(String loginId) {
