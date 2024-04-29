@@ -1,8 +1,9 @@
 package TEST.backend.article.service;
 
+import TEST.backend.article.config.author.PrincipalDetails;
 import TEST.backend.article.domain.dto.JoinRequest;
 import TEST.backend.article.domain.dto.LoginRequest;
-import TEST.backend.article.domain.dto.UserInfo;
+import TEST.backend.article.config.author.dto.UserInfo;
 import TEST.backend.article.domain.entity.User;
 import TEST.backend.article.repository.UserRepository;
 
@@ -46,7 +47,7 @@ public class UserService extends DefaultOAuth2UserService {
 		// register, login
 		User user = getOrSave(userInfo);
 
-		return new PrincipalDetails()
+		return new PrincipalDetails(user, userAttributes, userNameAttributeName);
 
 	}
 

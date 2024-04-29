@@ -1,11 +1,10 @@
-package TEST.backend.article.domain.dto;
+package TEST.backend.article.config.author.dto;
 
 import TEST.backend.article.constant.Role;
 import TEST.backend.article.domain.entity.User;
 import jakarta.security.auth.message.AuthException;
 import lombok.Builder;
 
-import javax.crypto.KeyGenerator;
 import java.util.Map;
 import java.util.UUID;
 

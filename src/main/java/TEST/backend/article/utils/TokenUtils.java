@@ -1,6 +1,6 @@
 package TEST.backend.article.utils;
 
-import TEST.backend.article.domain.dto.UserInfo;
+import TEST.backend.article.config.author.dto.UserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtBuilder;
