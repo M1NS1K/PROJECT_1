@@ -1,9 +1,9 @@
 package TEST.backend.article.service;
 
-import TEST.backend.article.config.author.PrincipalDetails;
+import TEST.backend.article.domain.dto.PrincipalDetails;
 import TEST.backend.article.domain.dto.JoinRequest;
 import TEST.backend.article.domain.dto.LoginRequest;
-import TEST.backend.article.config.author.dto.UserInfo;
+import TEST.backend.article.domain.dto.UserInfo;
 import TEST.backend.article.domain.entity.User;
 import TEST.backend.article.repository.UserRepository;
 

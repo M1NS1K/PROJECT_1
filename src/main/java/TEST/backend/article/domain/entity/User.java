@@ -1,7 +1,6 @@
 package TEST.backend.article.domain.entity;
 
 import TEST.backend.article.constant.Role;
-import TEST.backend.article.constant.RoleType;
 import TEST.backend.article.constant.UserStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,8 +17,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.util.UUID;
 
 @ToString(callSuper = true)
 @Entity
@@ -60,4 +57,11 @@ public class User {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
+
+    /**
+     * 로직
+     */
+    public User orElseGet(User user) {
+        return user;
+    }
 }

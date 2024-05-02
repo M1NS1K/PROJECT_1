@@ -1,6 +1,6 @@
 package TEST.backend.article.filter;
 
-import TEST.backend.article.utils.TokenUtils;
+import TEST.backend.article.utils.TokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -15,7 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Slf4j
@@ -69,9 +68,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             if(token != null && !token.equalsIgnoreCase("")) {
 
                 // [STEP.2-2] 쿠키 내에있는 토큰이 유효한지 여부를 체크한다.
-                if(TokenUtils.isValidToken(token)) {
+                if(TokenProvider.isValidToken(token)) {
 
-                    String loginId = TokenUtils.getUserIdFromToken(token);
+                    String loginId = TokenProvider.getUserIdFromToken(token);
                     log.debug("[+] loginId Check: " + loginId);
 
                     if(loginId != null && !loginId.equalsIgnoreCase("")) {

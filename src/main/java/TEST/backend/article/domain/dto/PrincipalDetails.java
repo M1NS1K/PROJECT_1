@@ -1,4 +1,4 @@
-package TEST.backend.article.config.author;
+package TEST.backend.article.domain.dto;
 
 import TEST.backend.article.domain.entity.User;
 import java.util.Collection;

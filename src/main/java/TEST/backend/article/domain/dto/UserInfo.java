@@ -1,8 +1,9 @@
-package TEST.backend.article.config.author.dto;
+package TEST.backend.article.domain.dto;
 
 import TEST.backend.article.constant.Role;
 import TEST.backend.article.domain.entity.User;
 import jakarta.security.auth.message.AuthException;
+import javax.crypto.KeyGenerator;
 import lombok.Builder;
 
 import java.util.Map;
@@ -46,7 +47,7 @@ public record UserInfo(
 				.username(name)
 				.email(email)
 				.profile(profile)
-				.userKey(UUID.randomUUID())
+				.userKey(KeyGenerator.getInstance())
 				.role(Role.USER)
 				.build();
 	}
