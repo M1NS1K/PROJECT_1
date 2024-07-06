@@ -1,7 +1,5 @@
-package TEST.backend.article.domain.entity;
+package TEST.backend.security.entity;
 
-import TEST.backend.article.constant.Role;
-import TEST.backend.article.constant.UserStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -52,16 +50,5 @@ public class User {
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role;
-
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UserStatus userStatus;
-
-    /**
-     * 로직
-     */
-    public User orElseGet(User user) {
-        return user;
-    }
+    private String role;
 }

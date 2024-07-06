@@ -1,11 +1,7 @@
 package TEST.backend.article.service;
 
-import TEST.backend.article.domain.dto.PrincipalDetails;
-import TEST.backend.article.domain.dto.JoinRequest;
-import TEST.backend.article.domain.dto.LoginRequest;
-import TEST.backend.article.domain.dto.UserInfo;
-import TEST.backend.article.domain.entity.User;
-import TEST.backend.article.repository.UserRepository;
+import TEST.backend.security.entity.User;
+import TEST.backend.security.repository.UserRepository;
 
 import java.util.Map;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package TEST.backend.article.config;
+package TEST.backend.security.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +24,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/css/**", "images/**", "/js/**", "/favicon.*", "/*/icon-*").permitAll()
-                .requestMatchers("/").permitAll()
-                .anyRequest().authenticated())
-                .formLogin(form -> form.loginPage("/login").permitAll());
+            .requestMatchers("/css/**", "images/**", "/js/**", "/favicon.*", "/*/icon-*").permitAll()
+            .requestMatchers("/").permitAll()
+            .anyRequest().authenticated())
+		        .formLogin(form -> form.loginPage("/login").permitAll()).userDetailsService(userDetailsService)
+		        .authenticationProvider(authenticationProvider);
         return http.build();
     }
 

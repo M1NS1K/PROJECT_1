@@ -1,6 +1,6 @@
-package TEST.backend.article.repository;
+package TEST.backend.security.repository;
 
-import TEST.backend.article.domain.entity.User;
+import TEST.backend.security.entity.User;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,4 +9,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByNickname(String nickname);
     Optional<User> findByLoginId(String loginId);
     User findByEmail(String email);
+
+		Integer countByUsername(String username);
+		User findByUsername(String username);
 }
