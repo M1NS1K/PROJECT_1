@@ -31,9 +31,9 @@ public class FormUserDetailsService implements UserDetailsService {
 				}
 
 				List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole()));
-
 				ModelMapper mapper = new ModelMapper();
 				UserDTO userDTO = mapper.map(user, UserDTO.class);
-				return new
+
+
 		}
 }
