@@ -29,6 +29,7 @@ public class SecurityConfig {
 	private final AuthenticationProvider restAuthenticationProvider;
 	private final AuthenticationProvider<HttpServletRequest, WebAuthenticationDetails> authenticationDetailsSource;
 	private final FormAuthenticationSuccessHandler successHandler;
+	private final FormAuthenticationFailureHandler failureHandler;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
