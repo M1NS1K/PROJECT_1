@@ -1,5 +1,6 @@
 package TEST.backend.security.config;
 
+import TEST.backend.security.handler.FormAuthenticationFailureHandler;
 import TEST.backend.security.handler.FormAuthenticationSuccessHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
