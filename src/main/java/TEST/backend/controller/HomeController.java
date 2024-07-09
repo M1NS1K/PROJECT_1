@@ -28,4 +28,10 @@ public class HomeController {
 	@GetMapping(value="/api")
 	public String restDashboard() {
 		return "rest/dashboard";
-	}}
+	}
+
+	@GetMapping(value = "/db")
+	public String db() {
+		return "/db";
+	}
+}
