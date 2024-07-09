@@ -10,8 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoleDto {
+
 	private String id;
 	private String roleName;
 	private String roleDesc;
 	private String isExpression;
+
 }

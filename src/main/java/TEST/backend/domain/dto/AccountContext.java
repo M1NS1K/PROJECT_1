@@ -9,6 +9,7 @@ import java.util.List;
 
 @Data
 public class AccountContext implements UserDetails {
+
 	private AccountDto accountDto;
 	private final List<GrantedAuthority> roles;
 

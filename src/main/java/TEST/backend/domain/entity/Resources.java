@@ -18,6 +18,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 public class Resources implements Serializable {
+
 	@Id
 	@GeneratedValue
 	@Column(name = "resource_id")
@@ -40,4 +41,5 @@ public class Resources implements Serializable {
 					inverseJoinColumns = { @JoinColumn(name = "role_id") })
 	@ToString.Exclude
 	private Set<Role> roleSet = new HashSet<>();
+
 }

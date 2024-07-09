@@ -34,6 +34,7 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
 		http.authorizeHttpRequests(auth -> auth
 										.requestMatchers("/css/**", "images/**", "/js/**", "/favicon.*", "/*/icon-*").permitAll()
 										.requestMatchers("/").permitAll()
@@ -41,16 +42,21 @@ public class SecurityConfig {
 						.formLogin(form -> form.loginPage("/login").permitAll()).userDetailsService(userDetailsService)
 						.authenticationProvider(authenticationProvider);
 		return http.build();
+
 	}
 
 	@Bean
 	public UserDetailsService userDetailsService() {
+
 		UserDetails user = User.withUsername("user").password("{noop}1111").roles("USER").build();
 		return new InMemoryUserDetailsManager(user);
+
 	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
+
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
 	}
 }

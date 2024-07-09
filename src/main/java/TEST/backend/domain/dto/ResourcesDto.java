@@ -13,6 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResourcesDto {
+
 	private String id;
 	private String resourceName;
 	private String httpMethod;
@@ -20,4 +21,5 @@ public class ResourcesDto {
 	private String resourceType;
 	private String roleName;
 	private Set<Role> roleSet;
+
 }
