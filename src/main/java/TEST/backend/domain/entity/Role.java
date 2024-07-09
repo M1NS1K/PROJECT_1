@@ -1,6 +1,5 @@
 package TEST.backend.domain.entity;
 
-import jakarta.annotation.Resources;
 import jakarta.persistence.*;
 import lombok.*;
 
