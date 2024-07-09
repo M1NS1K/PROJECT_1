@@ -1,6 +1,8 @@
 package TEST.backend.security.provider;
 
 import TEST.backend.domain.dto.AccountContext;
+import TEST.backend.security.details.FormWebAuthenticationDetails;
+import TEST.backend.security.exception.SecretException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,7 +32,12 @@ public class FormAuthenticationProvider implements AuthenticationProvider {
 			throw new BadCredentialsException("Invalid password");
 		}
 
-		return null;
+		String secretKey = ((FormWebAuthenticationDetails) authentication.getDetails()).getSecretKey();
+		if(secretKey == null || !secretKey.equals("secret")) {
+			throw new SecretException("Invalid Secret");
+		}
+
+		return new UsernamePasswordAuthenticationToken(accountContext.getAccountDto(), null, accountContext.getAuthorities());
 	}
 
 	@Override
