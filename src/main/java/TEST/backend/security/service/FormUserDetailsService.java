@@ -1,8 +1,9 @@
 package TEST.backend.security.service;
 
 import TEST.backend.domain.dto.AccountContext;
+import TEST.backend.domain.dto.AccountDto;
 import TEST.backend.domain.entity.Account;
-import TEST.backend.security.repository.UserRepository;
+import TEST.backend.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,17 +27,13 @@ public class FormUserDetailsService implements UserDetailsService {
 			Account account = userRepository.findByUsername(username);
 
 				if(account == null) {
-						if(userRepository.countByUsername(username) == 0) {
-								throw new UsernameNotFoundException("No user found with username: " + username);
-						}
+					throw new UsernameNotFoundException("No user found with username: " + username);
 				}
 
-				List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole()));
+				List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(account.getRoles()));
 				ModelMapper mapper = new ModelMapper();
-				UserDTO userDTO = mapper.map(user, UserDTO.class);
+				AccountDto accountDto = mapper.map(account, AccountDto.class);
 
-				return new AccountContext(accountDto, )
-
-
+				return new AccountContext(accountDto, authorities);
 		}
 }
