@@ -1,7 +1,7 @@
 package TEST.backend.security.service;
 
-import TEST.backend.security.dto.UserDTO;
-import TEST.backend.security.entity.User;
+import TEST.backend.domain.dto.AccountContext;
+import TEST.backend.domain.entity.Account;
 import TEST.backend.security.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -22,9 +22,10 @@ public class FormUserDetailsService implements UserDetailsService {
 
 		@Override
 		public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-				User user = userRepository.findByUsername(username);
 
-				if(user == null) {
+			Account account = userRepository.findByUsername(username);
+
+				if(account == null) {
 						if(userRepository.countByUsername(username) == 0) {
 								throw new UsernameNotFoundException("No user found with username: " + username);
 						}
@@ -33,6 +34,8 @@ public class FormUserDetailsService implements UserDetailsService {
 				List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole()));
 				ModelMapper mapper = new ModelMapper();
 				UserDTO userDTO = mapper.map(user, UserDTO.class);
+
+				return new AccountContext(accountDto, )
 
 
 		}
