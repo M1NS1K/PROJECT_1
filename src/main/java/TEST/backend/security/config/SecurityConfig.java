@@ -35,28 +35,24 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-		http.authorizeHttpRequests(auth -> auth
+		http
+						.authorizeHttpRequests(auth -> auth
 										.requestMatchers("/css/**", "images/**", "/js/**", "/favicon.*", "/*/icon-*").permitAll()
-										.requestMatchers("/").permitAll()
+										.requestMatchers("/", "/signup", "/login*").permitAll()
+										.requestMatchers("/user").hasAuthority("ROLE_USER")
+										.requestMatchers("/manager").hasAuthority("ROLE_MANAGER")
 										.anyRequest().authenticated())
-						.formLogin(form -> form.loginPage("/login").permitAll()).userDetailsService(userDetailsService)
-						.authenticationProvider(authenticationProvider);
+						.formLogin(form -> form
+										.loginPage("/login")
+										.authenticationDetailsSource(authenticationDetailsSource)
+										.successHandler(successHandler)
+										.failureHandler(failureHandler)
+										.permitAll())
+						.authenticationProvider(authenticationProvider)
+						.exceptionHandling(exception -> exception
+										.accessDeniedHandler(null));
+
 		return http.build();
-
-	}
-
-	@Bean
-	public UserDetailsService userDetailsService() {
-
-		UserDetails user = User.withUsername("user").password("{noop}1111").roles("USER").build();
-		return new InMemoryUserDetailsManager(user);
-
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-
-		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
 	}
 }
