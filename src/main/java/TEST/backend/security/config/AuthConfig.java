@@ -13,8 +13,8 @@ public class AuthConfig {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 
-	@Bean
-	public RoleHierarchyImpl roleHierarchy() {
-		return null;
-	}
+//	@Bean
+//	public RoleHierarchyImpl roleHierarchy() {
+//		return null;
+//	}
 }
