@@ -8,10 +8,8 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import rat2race.security.jwt.TokenProvider;
 
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
@@ -25,13 +23,18 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         String accessToken = resolveToken(request);
 
         if(tokenProvider.validateToken(accessToken)) {
-            Authentication authentication = tokenProvider.getAuthentication(accessToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            setAuthentication(accessToken);
         } else {
             String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
+            setAuthentication(reissueAccessToken);
         }
 
+        filterChain.doFilter(request, response);
+    }
 
+    private void setAuthentication(String token) {
+        Authentication authentication = tokenProvider.getAuthentication(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     private String resolveToken(HttpServletRequest request) {

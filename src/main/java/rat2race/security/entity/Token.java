@@ -1,35 +1,19 @@
 package rat2race.security.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 
 @Getter
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@RedisHash(value = "refreshToken", timeToLive = 14440)
 public class Token {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    private String accessToken;
+    @Id
+    private Long user_id;
     private String refreshToken;
 
-    public Token updateRefreshToken(String refreshToken) {
+    public Token(Long user_id, String refreshToken) {
+        this.user_id = user_id;
         this.refreshToken = refreshToken;
-        return this;
     }
-
-    public void updateAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
 }

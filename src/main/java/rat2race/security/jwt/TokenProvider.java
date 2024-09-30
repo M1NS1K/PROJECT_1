@@ -5,6 +5,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Jwts.SIG;
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
 import java.util.Collections;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import org.springframework.util.StringUtils;
 import rat2race.security.entity.Token;
+import rat2race.security.exception.CustomException;
 import rat2race.security.service.TokenService;
 
 @Component
@@ -50,7 +53,6 @@ public class TokenProvider {
     public void generateRefreshToken(Authentication authentication, String accessToken) {
         String refreshToken = generateJwt(authentication, REFRESH_TOKEN_EXPIRE_TIME);
         tokenService.saveOrUpdateToken(refreshToken, accessToken);
-
     }
 
     /**
@@ -82,6 +84,7 @@ public class TokenProvider {
 
     /**
      * 토큰 재발급
+     * refreshToken 만료됐을때 refreshtoken 재발급
      * @param accessToken
      * @return
      */
@@ -92,8 +95,11 @@ public class TokenProvider {
 
             if(validateToken(refreshToken)) {
                 String reissueAccessToken = generateAccessToken(getAuthentication(refreshToken));
-                tokenService.updateToken(reissueAccessToken, token);
+                tokenService.saveOrUpdateToken(refreshToken, reissueAccessToken);
                 return reissueAccessToken;
+            } else {
+                String reissueAccessToken = generateAccessToken(getAuthentication(refreshToken));
+                generateRefreshToken(getAuthentication(refreshToken), reissueAccessToken);
             }
         }
 
@@ -137,13 +143,10 @@ public class TokenProvider {
                     .build()
                     .parseSignedClaims(signedToken)
                     .getPayload();
-        } catch (ExpiredJwtException e) {
-			return e.getClaims();
-		} catch (MalformedJwtException e) {
-			throw new IllegalArgumentException("invalid token");
-		} catch (SecurityException e) {
-			throw new IllegalArgumentException("invalid jwt signature");
-		}
+        } catch (SecurityException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException
+                 | IllegalStateException e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, "Token Decode 과정에서 에러가 생겼습니다.");
+        }
     }
 
     /**

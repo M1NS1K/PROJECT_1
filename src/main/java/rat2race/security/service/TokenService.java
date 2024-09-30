@@ -12,15 +12,6 @@ public class TokenService {
 
     private final TokenRepository tokenRepository;
 
-    public void updateToken(String accessToken, Token token) {
-
-        if(token == null && accessToken == null) {
-            throw new IllegalArgumentException("잘못된 ACCESS TOKEN 입니다.");
-        }
-
-        token.updateAccessToken(accessToken);
-    }
-
     public void saveOrUpdateToken(String refreshToken, String accessToken) {
         Token token = tokenRepository.findByAccessToken(accessToken);
 
