@@ -8,25 +8,18 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import org.springframework.util.StringUtils;
-import rat2race.security.entity.RefreshToken;
 import rat2race.security.entity.UserDetailsImpl;
+import rat2race.security.entity.UserPrincipal;
 import rat2race.security.exception.CustomException;
 import rat2race.security.service.TokenService;
 import rat2race.security.service.UserService;
@@ -121,13 +114,13 @@ public class TokenProvider {
     public UsernamePasswordAuthenticationToken getAuthentication(String token) {
         Long userId = getUserIdByToken(token);
         UserDetailsImpl userDetails = userService.findByUserId(userId);
+        UserPrincipal userPrincipal = new UserPrincipal(userDetails);
+        return new UsernamePasswordAuthenticationToken(userPrincipal, token, userDetails.getAuthorities());
     }
 
 
     private Long getUserIdByToken(String token) {
         return parseClaims(token).get(USER_ID, Long.class);
     }
-
-
 
 }
