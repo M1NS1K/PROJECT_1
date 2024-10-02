@@ -4,7 +4,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import rat2race.security.entity.RefreshToken;
-import rat2race.security.entity.UserDetailsImpl;
 import rat2race.security.repository.TokenRepository;
 
 @Service

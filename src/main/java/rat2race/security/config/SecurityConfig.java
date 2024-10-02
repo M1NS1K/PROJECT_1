@@ -10,8 +10,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import rat2race.security.jwt.TokenAuthenticationFilter;
-import rat2race.security.jwt.TokenProvider;
+import rat2race.security.filter.TokenAuthenticationFilter;
+import rat2race.security.service.TokenProvider;
 
 @Configuration
 @EnableWebSecurity
