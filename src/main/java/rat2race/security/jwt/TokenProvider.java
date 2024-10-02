@@ -25,9 +25,11 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import org.springframework.util.StringUtils;
-import rat2race.security.entity.Token;
+import rat2race.security.entity.RefreshToken;
+import rat2race.security.entity.UserDetailsImpl;
 import rat2race.security.exception.CustomException;
 import rat2race.security.service.TokenService;
+import rat2race.security.service.UserService;
 
 @Component
 @RequiredArgsConstructor
@@ -36,8 +38,11 @@ public class TokenProvider {
     private SecretKey secretKey;
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30L;
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L * 24 * 7;
-    private static final String KEY_ROLE = "role";
+    private static final String ACCESS_TOKEN = "accessToken";
+    private static final String REFRESH_TOKEN = "refreshToken";
+    private static final String USER_ID = "userId";
     private final TokenService tokenService;
+    private final UserService userService;
 
     @PostConstruct
     public void setSecretKey(@Value("${spring.jwt.secret}") String secretKey) {
@@ -46,33 +51,14 @@ public class TokenProvider {
         );
     }
 
-    public String generateAccessToken(Authentication authentication) {
-        return generateJwt(authentication, ACCESS_TOKEN_EXPIRE_TIME);
+    public String generateAccessToken(Long userId) {
+        return generateJwt(userId, ACCESS_TOKEN,  ACCESS_TOKEN_EXPIRE_TIME);
     }
 
-    public void generateRefreshToken(Authentication authentication, String accessToken) {
-        String refreshToken = generateJwt(authentication, REFRESH_TOKEN_EXPIRE_TIME);
-        tokenService.saveOrUpdateToken(refreshToken, accessToken);
+    public String generateRefreshToken(Long userId) {
+        return generateJwt(userId, REFRESH_TOKEN, REFRESH_TOKEN_EXPIRE_TIME);
     }
 
-    /**
-     * 사용자 인증 정보 추출
-     * @param signedToken
-     * @return
-     */
-    public Authentication getAuthentication(String signedToken) {
-		Claims claims = parseClaims(signedToken);
-		List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
-
-		User principal = new User(claims.getSubject(), "", authorities);
-		return new UsernamePasswordAuthenticationToken(principal, signedToken, authorities);
-	}
-
-    /**
-     * 토큰 만료 확인
-     * @param token
-     * @return
-     */
 	public boolean validateToken(String token) {
 		if (!StringUtils.hasText(token)) {
 			return false;
@@ -82,61 +68,44 @@ public class TokenProvider {
 		return claims.getExpiration().after(new Date());
 	}
 
-    /**
-     * 토큰 재발급
-     * refreshToken 만료됐을때 refreshtoken 재발급
-     * @param accessToken
-     * @return
-     */
-	public String reissueAccessToken(String accessToken) {
-        if(StringUtils.hasText(accessToken)) {
-            Token token = tokenService.findByAccessToken(accessToken);
-            String refreshToken = token.getRefreshToken();
+	public String reissueAccessToken(String token) {
+
+        Long userId = getUserIdByToken(token);
+        String refreshToken = parseClaims(token).get(REFRESH_TOKEN, String.class);
+
+        if(refreshToken != null) {
+            String reissueAccessToken = generateAccessToken(userId);
 
             if(validateToken(refreshToken)) {
-                String reissueAccessToken = generateAccessToken(getAuthentication(refreshToken));
-                tokenService.saveOrUpdateToken(refreshToken, reissueAccessToken);
-                return reissueAccessToken;
-            } else {
-                String reissueAccessToken = generateAccessToken(getAuthentication(refreshToken));
-                generateRefreshToken(getAuthentication(refreshToken), reissueAccessToken);
+                tokenService.saveOrUpdateRefreshToken(userId, refreshToken);
             }
+
+            return reissueAccessToken;
         }
 
         return null;
 	}
 
-    /**
-     * 토큰 생성
-     * @param authentication
-     * @param expiredTime
-     * @return
-     */
-    private String generateJwt(Authentication authentication, Long expiredTime) {
+    private String generateJwt(Long userId, String tokenType, Long expiredTime) {
 
-        Date now = new Date();
-        Date expiredDate = new Date(now.getTime() + expiredTime);
+        Claims claims = Jwts.claims()
+                .subject(tokenType)
+                .add(USER_ID, userId)
+                .build();
 
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining());
+        Date currentTime = new Date();
+
+        Date expiredDate = new Date(currentTime.getTime() + expiredTime);
 
         return Jwts.builder()
-                .subject(authentication.getName())
-                .claim(KEY_ROLE, authorities)
-                .issuedAt(now)
+                .claims(claims)
+                .issuedAt(currentTime)
                 .expiration(expiredDate)
                 .signWith(secretKey)
                 .compact();
     }
 
-
-    /**
-     * Claim 파서
-     * @param signedToken
-     * @return
-     */
-    private Claims parseClaims(String signedToken) {
+    public Claims parseClaims(String signedToken) {
         try {
             return Jwts.parser()
                     .verifyWith(secretKey)
@@ -149,14 +118,16 @@ public class TokenProvider {
         }
     }
 
-    /**
-     * 클레임에서 권한 GET
-     * @param claims
-     * @return
-     */
-	private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
-		return Collections.singletonList(new SimpleGrantedAuthority(
-				claims.get(KEY_ROLE).toString()));
-	}
+    public UsernamePasswordAuthenticationToken getAuthentication(String token) {
+        Long userId = getUserIdByToken(token);
+        UserDetailsImpl userDetails = userService.findByUserId(userId);
+    }
+
+
+    private Long getUserIdByToken(String token) {
+        return parseClaims(token).get(USER_ID, Long.class);
+    }
+
+
 
 }

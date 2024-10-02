@@ -1,9 +1,10 @@
 package rat2race.security.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import rat2race.security.entity.Token;
+import rat2race.security.entity.RefreshToken;
+import rat2race.security.entity.UserDetailsImpl;
 import rat2race.security.repository.TokenRepository;
 
 @Service
@@ -12,36 +13,34 @@ public class TokenService {
 
     private final TokenRepository tokenRepository;
 
-    public void saveOrUpdateToken(String refreshToken, String accessToken) {
-        Token token = tokenRepository.findByAccessToken(accessToken);
-
-        if(refreshToken == null) {
-            throw new IllegalArgumentException("잘못된 REFRESH TOKEN 입니다.");
-        }
+    /**
+     * RT 있으면 update 아니면 save
+     * @param userId
+     * @param newRefreshToken
+     */
+    public void saveOrUpdateRefreshToken(Long userId, String newRefreshToken) {
+        RefreshToken token = findByUserId(userId);
 
         if(token == null) {
-            Token newToken = Token.builder()
-                    .accessToken(accessToken)
-                    .refreshToken(refreshToken)
-                    .build();
-
-            tokenRepository.save(newToken);
+            tokenRepository.save(new RefreshToken(userId, newRefreshToken));
         } else {
-            token.updateRefreshToken(refreshToken);
+            token.updateRefreshToken(newRefreshToken);
         }
     }
 
-    public boolean validRefreshToken(String accessToken, String refreshToken) {
-        String storedRefreshToken = tokenRepository.findByAccessToken(accessToken).getRefreshToken();
+    /**
+     * UserId에 맞는 RT가 없을 때 null return
+     * @param userId
+     * @return
+     */
+    public RefreshToken findByUserId(Long userId) {
+        Optional<RefreshToken> refreshToken = tokenRepository.findById(userId);
 
-        if(!storedRefreshToken.equals(refreshToken)) {
-            return false;
+        if(refreshToken != null) {
+            return refreshToken.get();
+        } else {
+            return null;
         }
-
-        return true;
     }
 
-    public Token findByAccessToken(String accessToken) {
-        return tokenRepository.findByAccessToken(accessToken);
-    }
 }

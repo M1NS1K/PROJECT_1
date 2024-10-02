@@ -1,5 +1,6 @@
 package rat2race.security.jwt;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,10 +23,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         String accessToken = resolveToken(request);
 
-        if(tokenProvider.validateToken(accessToken)) {
+        if(StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
             setAuthentication(accessToken);
         } else {
-            String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
+            String reissueAccessToken = tokenProvider.reissueAccessToken(userId);
             setAuthentication(reissueAccessToken);
         }
 
