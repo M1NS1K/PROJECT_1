@@ -6,5 +6,4 @@ import rat2race.security.entity.RefreshToken;
 
 @Repository
 public interface TokenRepository extends CrudRepository<RefreshToken, Long> {
-    Long getUserIdByRefreshToken();
 }
