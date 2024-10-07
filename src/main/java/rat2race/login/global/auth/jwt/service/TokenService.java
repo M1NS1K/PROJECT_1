@@ -13,10 +13,9 @@ public class TokenService {
 
     private final RedisTemplate<Long, String> redisTemplate;
 
-
-
     /**
      * RT save 3day
+     *
      * @param userId
      * @param newRefreshToken
      */
@@ -25,39 +24,33 @@ public class TokenService {
     }
 
     /**
-     *
      * @param userId
      * @return
      */
-    public RefreshToken findByUserId(Long userId) {
-        redisTemplate.opsForValue().get(userId);
+    public String findRefreshTokenByUserId(Long userId) {
+        return redisTemplate.opsForValue().get(userId);
     }
 
     /**
      * delete refreshToken
+     *
      * @param userId
      */
     public void deleteRefreshToken(Long userId) {
-        redisTemplate.delete(String.valueOf(userId));
+        redisTemplate.delete(userId);
     }
 
-    public void setAccessTokenBlackList(String accessToken) {
-        redisTemplate.opsForValue().set(accessToken, "blacklist", Duration.ofHours(1));
+    public void setUserBlackList(Long userId) {
+        redisTemplate.opsForValue().set(userId, "blacklist", Duration.ofHours(1));
     }
 
-    public String getUserIdFromRefreshToken(String refreshToken) {
-        return redisTemplate.opsForValue().get(refreshToken);
-    }
-
-    public ResponseCookie createHttpOnlyCookie(
-            String refreshToken) {
-        ResponseCookie responseCookie = ResponseCookie.from("refreshToken", refreshToken)
+    public ResponseCookie createHttpOnlyCookie(String refreshToken) {
+        return ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
                 .maxAge(Duration.ofDays(1))
                 .build();
-        return responseCookie;
     }
 
 }

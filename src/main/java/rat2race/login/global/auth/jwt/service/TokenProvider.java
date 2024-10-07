@@ -52,6 +52,12 @@ public class TokenProvider {
         return generateJwt(userId, REFRESH_TOKEN, REFRESH_TOKEN_EXPIRE_TIME);
     }
 
+    /**
+     * token이 만료되면 false return
+     * 만료되지 않으면 true return
+     * @param token
+     * @return
+     */
 	public boolean validateToken(String token) {
 		if (!StringUtils.hasText(token)) {
 			return false;
@@ -69,8 +75,12 @@ public class TokenProvider {
         if(refreshToken != null) {
             String reissueAccessToken = generateAccessToken(userId);
 
-            if(validateToken(refreshToken)) {
-                tokenService.saveOrUpdateRefreshToken(userId, refreshToken);
+            /**
+             * RT가 만료되면 update refreshToken
+             */
+            if(!validateToken(refreshToken)) {
+                String newRefreshToken = generateRefreshToken(userId);
+                tokenService.saveOrUpdateRefreshToken(userId, newRefreshToken);
             }
 
             return reissueAccessToken;
