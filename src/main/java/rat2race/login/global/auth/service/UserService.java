@@ -3,7 +3,7 @@ package rat2race.login.global.auth.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import rat2race.login.domain.user.entity.UserDetailsImpl;
-import rat2race.login.global.auth.repository.UserRepository;
+import rat2race.login.domain.user.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor

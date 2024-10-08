@@ -70,7 +70,7 @@ public class TokenProvider {
 	public String reissueAccessToken(String token) {
 
         Long userId = getUserIdByToken(token);
-        String refreshToken = parseClaims(token).get(REFRESH_TOKEN, String.class);
+        String refreshToken = tokenService.findRefreshTokenByUserId(userId);
 
         if(refreshToken != null) {
             String reissueAccessToken = generateAccessToken(userId);

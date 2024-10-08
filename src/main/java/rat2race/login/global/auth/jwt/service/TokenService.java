@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
-import rat2race.login.domain.user.entity.RefreshToken;
 
 @Service
 @RequiredArgsConstructor
@@ -36,11 +35,12 @@ public class TokenService {
      *
      * @param userId
      */
-    public void deleteRefreshToken(Long userId) {
+    private void deleteRefreshToken(Long userId) {
         redisTemplate.delete(userId);
     }
 
     public void setUserBlackList(Long userId) {
+        deleteRefreshToken(userId);
         redisTemplate.opsForValue().set(userId, "blacklist", Duration.ofHours(1));
     }
 
