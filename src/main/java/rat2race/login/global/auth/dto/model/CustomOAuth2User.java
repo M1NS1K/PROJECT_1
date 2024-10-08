@@ -21,7 +21,7 @@ public record CustomOAuth2User(
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(
-                new SimpleGrantedAuthority(user.getRole().getKey());
+                new SimpleGrantedAuthority(user.getRole().getKey())
         );
     }
 

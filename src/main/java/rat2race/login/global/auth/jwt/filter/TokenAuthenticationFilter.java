@@ -25,9 +25,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         if(StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
             setAuthentication(accessToken);
-        } else {
+        } else if(StringUtils.hasText(accessToken)){
             String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
-            setAuthentication(reissueAccessToken);
+            if(reissueAccessToken != null) {
+                setAuthentication(reissueAccessToken);
+            }
         }
 
         filterChain.doFilter(request, response);

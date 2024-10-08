@@ -32,18 +32,18 @@ public class User extends BaseTimeEntity {
     private String profile;
 
     @Column(nullable = false, unique = true)
-    private String memberKey;
+    private String userKey;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
     @Builder
-    public User(String name, String email, String profile, String memberKey, Role role) {
+    public User(String name, String email, String profile, String userKey, Role role) {
         this.name = name;
         this.email = email;
         this.profile = profile;
-        this.memberKey = memberKey;
+        this.userKey = userKey;
         this.role = role;
     }
 }

@@ -8,15 +8,25 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import org.springframework.util.StringUtils;
+import rat2race.login.domain.user.entity.Role;
+import rat2race.login.global.auth.dto.model.CustomOAuth2User;
 import rat2race.login.global.common.exception.CustomException;
 
 
@@ -30,6 +40,7 @@ public class TokenProvider {
     private static final String ACCESS_TOKEN = "accessToken";
     private static final String REFRESH_TOKEN = "refreshToken";
     private static final String USER_ID = "userId";
+    private static final String USER_ROLE = "role";
     private final TokenService tokenService;
 
     @PostConstruct
@@ -39,42 +50,47 @@ public class TokenProvider {
         );
     }
 
-    public String generateAccessToken(Long userId) {
-        return generateJwt(userId, ACCESS_TOKEN,  ACCESS_TOKEN_EXPIRE_TIME);
+    public String generateAccessToken(Long userId, Role userRole) {
+        return generateJwt(userId, userRole, ACCESS_TOKEN, ACCESS_TOKEN_EXPIRE_TIME);
     }
 
-    public String generateRefreshToken(Long userId) {
-        return generateJwt(userId, REFRESH_TOKEN, REFRESH_TOKEN_EXPIRE_TIME);
+    public String generateRefreshToken(Long userId, Role userRole) {
+        return generateJwt(userId, userRole, REFRESH_TOKEN, REFRESH_TOKEN_EXPIRE_TIME);
     }
 
     /**
-     * token이 만료되면 false return
-     * 만료되지 않으면 true return
+     * token이 만료되면 false return 만료되지 않으면 true return
+     *
      * @param token
      * @return
      */
-	public boolean validateToken(String token) {
-		if (!StringUtils.hasText(token)) {
-			return false;
-		}
+    public boolean validateToken(String token) {
+        if(StringUtils.hasText(token)) {
+            Claims claims = parseClaims(token);
+            return claims.getExpiration().after(new Date());
+        }
 
-		Claims claims = parseClaims(token);
-		return claims.getExpiration().after(new Date());
-	}
+        throw new CustomException(HttpStatus.BAD_REQUEST, "not valid token type");
+    }
 
-	public String reissueAccessToken(String token) {
+    public String reissueAccessToken(String token) {
 
         Long userId = getUserIdByToken(token);
+        Role userRole = getUserRoleByToken(token);
         String refreshToken = tokenService.findRefreshTokenByUserId(userId);
 
-        if(refreshToken != null) {
-            String reissueAccessToken = generateAccessToken(userId);
+        if(userId == null || userRole == null) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, "not valid userId, userRole");
+        }
+
+        if (refreshToken != null) {
+            String reissueAccessToken = generateAccessToken(userId, userRole);
 
             /**
              * RT가 만료되면 update refreshToken
              */
-            if(!validateToken(refreshToken)) {
-                String newRefreshToken = generateRefreshToken(userId);
+            if (!validateToken(refreshToken)) {
+                String newRefreshToken = generateRefreshToken(userId, userRole);
                 tokenService.saveOrUpdateRefreshToken(userId, newRefreshToken);
             }
 
@@ -82,13 +98,14 @@ public class TokenProvider {
         }
 
         return null;
-	}
+    }
 
-    private String generateJwt(Long userId, String tokenType, Long expiredTime) {
+    private String generateJwt(Long userId, Role userRole, String tokenType, Long expiredTime) {
 
         Claims claims = Jwts.claims()
                 .subject(tokenType)
                 .add(USER_ID, userId)
+                .add(USER_ROLE, userRole)
                 .build();
 
         Date currentTime = new Date();
@@ -116,8 +133,21 @@ public class TokenProvider {
         }
     }
 
+    public Authentication getAuthentication(String token) {
+        Long userId = getUserIdByToken(token);
+        Role userRole = getUserRoleByToken(token);
+
+        List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(userRole.getKey()));
+
+        return new UsernamePasswordAuthenticationToken(userId, null, authorities);
+    }
+
     private Long getUserIdByToken(String token) {
         return parseClaims(token).get(USER_ID, Long.class);
+    }
+
+    private Role getUserRoleByToken(String token) {
+        return parseClaims(token).get(USER_ROLE, Role.class);
     }
 
 }
