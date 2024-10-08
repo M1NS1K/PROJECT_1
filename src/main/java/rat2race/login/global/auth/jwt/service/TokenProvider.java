@@ -11,16 +11,12 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import org.springframework.util.StringUtils;
-import rat2race.login.domain.user.entity.UserDetailsImpl;
-import rat2race.login.domain.user.entity.UserPrincipal;
-import rat2race.login.global.auth.service.UserService;
 import rat2race.login.global.common.exception.CustomException;
 
 
@@ -35,7 +31,6 @@ public class TokenProvider {
     private static final String REFRESH_TOKEN = "refreshToken";
     private static final String USER_ID = "userId";
     private final TokenService tokenService;
-    private final UserService userService;
 
     @PostConstruct
     public void setSecretKey(@Value("${spring.jwt.secret}") String secretKey) {
@@ -120,14 +115,6 @@ public class TokenProvider {
             throw new CustomException(HttpStatus.BAD_REQUEST, "Token Decode 과정에서 에러가 생겼습니다.");
         }
     }
-
-    public UsernamePasswordAuthenticationToken getAuthentication(String token) {
-        Long userId = getUserIdByToken(token);
-        UserDetailsImpl userDetails = userService.findByUserId(userId);
-        UserPrincipal userPrincipal = new UserPrincipal(userDetails);
-        return new UsernamePasswordAuthenticationToken(userPrincipal, token, userDetails.getAuthorities());
-    }
-
 
     private Long getUserIdByToken(String token) {
         return parseClaims(token).get(USER_ID, Long.class);
