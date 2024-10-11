@@ -9,19 +9,14 @@ import io.jsonwebtoken.Jwts.SIG;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SecurityException;
-import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.Token;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -29,8 +24,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import org.springframework.util.StringUtils;
 import rat2race.login.domain.user.entity.Role;
-import rat2race.login.global.auth.dto.model.CustomOAuth2User;
-import rat2race.login.global.common.exception.CustomException;
 import rat2race.login.global.common.exception.TokenException;
 
 
@@ -38,7 +31,9 @@ import rat2race.login.global.common.exception.TokenException;
 @RequiredArgsConstructor
 public class TokenProvider {
 
-    private SecretKey secretKey;
+    @Value("${spring.jwt.secret}")
+    private String secretKey;
+
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30L;
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L * 24 * 7;
     private static final String ACCESS_TOKEN = "accessToken";
@@ -46,13 +41,6 @@ public class TokenProvider {
     private static final String USER_ID = "userId";
     private static final String USER_ROLE = "role";
     private final TokenService tokenService;
-
-    @PostConstruct
-    public void setSecretKey(@Value("${spring.jwt.secret}") String secretKey) {
-        this.secretKey = new SecretKeySpec(
-                secretKey.getBytes(StandardCharsets.UTF_8), SIG.HS256.key().build().getAlgorithm()
-        );
-    }
 
     public String generateAccessToken(Long userId, Role userRole) {
         return generateJwt(userId, userRole, ACCESS_TOKEN, ACCESS_TOKEN_EXPIRE_TIME);
@@ -116,18 +104,24 @@ public class TokenProvider {
 
         Date expiredDate = new Date(currentTime.getTime() + expiredTime);
 
+        SecretKey encryptedSecretKey = new SecretKeySpec(
+                secretKey.getBytes(StandardCharsets.UTF_8), SIG.HS256.key().build().getAlgorithm());
+
         return Jwts.builder()
                 .claims(claims)
                 .issuedAt(currentTime)
                 .expiration(expiredDate)
-                .signWith(secretKey)
+                .signWith(encryptedSecretKey)
                 .compact();
     }
 
     public Claims parseClaims(String signedToken) {
+        SecretKey encryptedSecretKey = new SecretKeySpec(
+                secretKey.getBytes(StandardCharsets.UTF_8), SIG.HS256.key().build().getAlgorithm());
+
         try {
             return Jwts.parser()
-                    .verifyWith(secretKey)
+                    .verifyWith(encryptedSecretKey)
                     .build()
                     .parseSignedClaims(signedToken)
                     .getPayload();

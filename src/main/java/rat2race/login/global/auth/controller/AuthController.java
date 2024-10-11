@@ -19,4 +19,8 @@ public class AuthController {
 
     private final TokenService tokenService;
 
+    @GetMapping("/auth/success")
+    public ResponseEntity<LoginResponse> loginSuccess(@Valid LoginResponse loginResponse) {
+        return ResponseEntity.ok(loginResponse);
+    }
 }
