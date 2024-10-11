@@ -1,5 +1,7 @@
 package rat2race.login.global.auth.jwt.service;
 
+import static rat2race.login.global.common.exception.ErrorCode.INVALID_TOKEN;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -11,6 +13,7 @@ import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.antlr.v4.runtime.Token;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +31,7 @@ import org.springframework.util.StringUtils;
 import rat2race.login.domain.user.entity.Role;
 import rat2race.login.global.auth.dto.model.CustomOAuth2User;
 import rat2race.login.global.common.exception.CustomException;
+import rat2race.login.global.common.exception.TokenException;
 
 
 @Component
@@ -70,7 +74,7 @@ public class TokenProvider {
             return claims.getExpiration().after(new Date());
         }
 
-        throw new CustomException(HttpStatus.BAD_REQUEST, "not valid token type");
+        throw new TokenException(INVALID_TOKEN);
     }
 
     public String reissueAccessToken(String token) {
@@ -80,7 +84,7 @@ public class TokenProvider {
         String refreshToken = tokenService.findRefreshTokenByUserId(userId);
 
         if(userId == null || userRole == null) {
-            throw new CustomException(HttpStatus.BAD_REQUEST, "not valid userId, userRole");
+            throw new TokenException(INVALID_TOKEN);
         }
 
         if (refreshToken != null) {
@@ -105,7 +109,7 @@ public class TokenProvider {
         Claims claims = Jwts.claims()
                 .subject(tokenType)
                 .add(USER_ID, userId)
-                .add(USER_ROLE, userRole)
+                .add(USER_ROLE, userRole.getKey())
                 .build();
 
         Date currentTime = new Date();
@@ -129,7 +133,7 @@ public class TokenProvider {
                     .getPayload();
         } catch (SecurityException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException
                  | IllegalStateException e) {
-            throw new CustomException(HttpStatus.BAD_REQUEST, "Token Decode 과정에서 에러가 생겼습니다.");
+            throw new TokenException(INVALID_TOKEN);
         }
     }
 

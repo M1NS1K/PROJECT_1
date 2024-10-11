@@ -1,10 +1,13 @@
 package rat2race.login.global.auth.service;
 
-import jakarta.security.auth.message.AuthException;
+import static rat2race.login.global.common.exception.ErrorCode.NO_ACCESS;
+import static rat2race.login.global.common.exception.ErrorCode.USER_NOT_FOUND;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import rat2race.login.domain.user.entity.User;
 import rat2race.login.domain.user.repository.UserRepository;
+import rat2race.login.global.common.exception.AuthException;
 
 @Service
 @RequiredArgsConstructor
@@ -14,7 +17,13 @@ public class AuthenticationService {
 
     public User getUserOrThrow(String userKey) {
         return userRepository.findByUserKey(userKey)
-                .orElseThrow(() -> new AuthException())
+                .orElseThrow(() -> new AuthException(USER_NOT_FOUND));
+    }
+
+    public void checkAccess(String userKey, User user) {
+        if(!user.getUserKey().equals(userKey)) {
+            throw new AuthException(NO_ACCESS);
+        }
     }
 
 }
