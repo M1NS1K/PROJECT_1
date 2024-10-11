@@ -13,7 +13,6 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import rat2race.login.domain.user.entity.Role;
-import rat2race.login.global.auth.dto.CustomOAuth2UserInfo;
 import rat2race.login.global.auth.dto.model.CustomOAuth2User;
 import rat2race.login.global.auth.jwt.service.TokenProvider;
 import rat2race.login.global.auth.jwt.service.TokenService;
@@ -25,7 +24,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private final TokenProvider tokenProvider;
     private final TokenService tokenService;
     private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-    private static final String URI = "/auth/success";
+    private final String URI = "/auth/success";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
