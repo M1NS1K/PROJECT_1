@@ -1,10 +1,12 @@
 package rat2race.login.global.auth.dto;
 
-import jakarta.security.auth.message.AuthException;
+import static rat2race.login.global.common.exception.ErrorCode.ILLEGAL_REGISTRATION_ID;
+
 import java.util.Map;
 import lombok.Builder;
 import rat2race.login.domain.user.entity.Role;
 import rat2race.login.domain.user.entity.User;
+import rat2race.login.global.common.exception.AuthException;
 
 @Builder
 public record CustomOAuth2UserInfo(
@@ -13,11 +15,11 @@ public record CustomOAuth2UserInfo(
         String profile
 ) {
 
-    public static CustomOAuth2UserInfo of(String registrationId, Map<String, Object> attributes) throws AuthException {
+    public static CustomOAuth2UserInfo of(String registrationId, Map<String, Object> attributes) {
         return switch(registrationId) {
             case "google" -> ofGoogle(attributes);
             case "kakao" -> ofKakao(attributes);
-            default -> throw new AuthException("illegal registration id");
+            default -> throw new AuthException(ILLEGAL_REGISTRATION_ID);
         };
     }
 
