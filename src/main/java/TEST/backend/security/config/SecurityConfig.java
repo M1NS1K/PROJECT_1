@@ -40,6 +40,7 @@ public class SecurityConfig {
 										.requestMatchers("/", "/signup", "/login*").permitAll()
 										.requestMatchers("/user").hasAuthority("ROLE_USER")
 										.requestMatchers("/manager").hasAuthority("ROLE_MANAGER")
+										.requestMatchers("/v1/oauth/**").permitAll()
 										.anyRequest().authenticated())
 						.formLogin(AbstractHttpConfigurer::disable)
 						.authenticationProvider(authenticationProvider)

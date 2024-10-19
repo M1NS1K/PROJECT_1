@@ -1,2 +1,6 @@
-jwt:
-  secret: ksdngskgnsdgskdgskdg
+app:
+  token:
+    secret-key: asdfasdfsadfasdf
+    expiration:
+      access-token: 864000
+      refresh-token: 3000000
