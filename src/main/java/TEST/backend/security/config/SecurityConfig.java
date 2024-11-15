@@ -41,6 +41,7 @@ public class SecurityConfig {
 										.requestMatchers("/user").hasAuthority("ROLE_USER")
 										.requestMatchers("/manager").hasAuthority("ROLE_MANAGER")
 										.requestMatchers("/v1/oauth/**").permitAll()
+								.requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
 										.anyRequest().authenticated())
 						.formLogin(AbstractHttpConfigurer::disable)
 						.authenticationProvider(authenticationProvider)
