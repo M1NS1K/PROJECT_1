@@ -97,12 +97,17 @@
         "type": "object",
         "properties": {
           "accessToken": {
-            "type": "string"
+            "type": "string",
+            "description": "액세스 토큰",
+            "example": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNjI5MjM5MjIyLCJleHAiOjE2MjkzMDI4MjJ9.7"
           },
           "refreshToken": {
-            "type": "string"
+            "type": "string",
+            "description": "리프레시 토큰",
+            "example": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNjI5MjM5MjIyLCJleHAiOjE2MjkzMDI4MjJ9.7"
           }
-        }
+        },
+        "description": "JWT 응답"
       },
       "KakaoLoginRequestDto": {
         "type": "object",
